@@ -18,7 +18,7 @@ const Campaigns = () => {
   }, []);
 
   return (
-    <section className="max-w-7xl mx-auto px-4 py-12">
+    <section className="max-w-7xl mx-auto px-4 py-12" id="campaigns">
       {/* Header & Intro Text */}
       <div className="mb-12 max-w-2xl text-center mx-auto space-y-4">
         <h1 className="text-4xl font-bold text-foreground">Every <span className="text-primary">dream</span> deserves a chance.</h1>

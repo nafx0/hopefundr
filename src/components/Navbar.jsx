@@ -1,5 +1,6 @@
-import { NavLink as RouterLink } from "react-router-dom";
-import { NavHashLink as HashLink } from "react-router-hash-link";
+import { useState } from "react";
+import { NavLink as RouterLink, useLocation } from "react-router-dom";
+import { NavHashLink } from "react-router-hash-link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,6 +27,9 @@ const user = null; // Placeholder
 const signOutUser = () => console.log("User signed out");
 
 export default function NavBar() {
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const location = useLocation();
+  
   const mainLinks = [
     { title: "Home", href: "/#home", hashLink: true },
     { title: "All Campaigns", href: "/#campaigns", hashLink: true },
@@ -36,6 +40,16 @@ export default function NavBar() {
     { title: "My Campaigns", href: "/myCampaigns" },
     { title: "Create Campaign", href: "/createCampaign" },
   ];
+
+  // Helper to determine active hash links
+  const isHashLinkActive = (href) => {
+    const [path, hash] = href.split('#');
+    const currentPath = path || '/';
+    const currentHash = hash ? `#${hash}` : '';
+    
+    return location.pathname === currentPath && 
+           location.hash === currentHash;
+  };
 
   return (
     <header className="sticky top-0 z-40 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 max-w-7xl mx-auto px-5 md:px-0">
@@ -56,7 +70,7 @@ export default function NavBar() {
               {mainLinks.map((link) => (
                 <NavigationMenuItem key={link.href}>
                   {link.hashLink ? (
-                    <HashLink
+                    <NavHashLink
                       smooth
                       to={link.href}
                       scroll={(el) =>
@@ -65,13 +79,15 @@ export default function NavBar() {
                           behavior: "smooth",
                         })
                       }
+                      activeClassName="text-primary"
                       className={cn(
                         navigationMenuTriggerStyle(),
-                        "font-medium transition-colors hover:text-primary text-gray-900"
+                        "font-medium transition-colors hover:text-primary",
+                        isHashLinkActive(link.href) && "text-primary"
                       )}
                     >
                       {link.title}
-                    </HashLink>
+                    </NavHashLink>
                   ) : (
                     <RouterLink to={link.href}>
                       {({ isActive }) => (
@@ -79,7 +95,7 @@ export default function NavBar() {
                           className={cn(
                             navigationMenuTriggerStyle(),
                             "font-medium transition-colors hover:text-primary",
-                            isActive ? "text-primary" : "text-gray-900"
+                            isActive ? "text-primary" : ""
                           )}
                           active={isActive}
                         >
@@ -100,7 +116,7 @@ export default function NavBar() {
                           className={cn(
                             navigationMenuTriggerStyle(),
                             "font-medium transition-colors hover:text-primary",
-                            isActive ? "text-primary" : "text-gray-900"
+                            isActive ? "text-primary" : ""
                           )}
                           active={isActive}
                         >
@@ -119,7 +135,7 @@ export default function NavBar() {
           <Button variant="default" size="sm" asChild>
             {!user ? (
               <RouterLink to="/login">
-                Login <LogIn className="ml-2 h-4 w-4" />
+                Login/Register <LogIn className="ml-2 h-4 w-4" />
               </RouterLink>
             ) : (
               <button onClick={signOutUser} className="flex items-center gap-1">
@@ -131,7 +147,7 @@ export default function NavBar() {
 
         {/* Mobile Menu */}
         <div className="md:hidden">
-          <Sheet>
+          <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
             <SheetTrigger asChild>
               <Button variant="outline" size="icon" className="h-9 w-9">
                 <Menu className="h-5 w-5" />
@@ -149,7 +165,7 @@ export default function NavBar() {
               <nav className="flex flex-col gap-4 mt-4 px-5">
                 {mainLinks.map((link) =>
                   link.hashLink ? (
-                    <HashLink
+                    <NavHashLink
                       key={link.href}
                       smooth
                       to={link.href}
@@ -159,10 +175,15 @@ export default function NavBar() {
                           behavior: "smooth",
                         })
                       }
-                      className="text-lg font-medium transition-colors hover:text-primary text-gray-900"
+                      activeClassName="text-primary"
+                      className={cn(
+                        "text-lg font-medium transition-colors hover:text-primary",
+                        isHashLinkActive(link.href) && "text-primary"
+                      )}
+                      onClick={() => setIsSheetOpen(false)}
                     >
                       {link.title}
-                    </HashLink>
+                    </NavHashLink>
                   ) : (
                     <RouterLink
                       key={link.href}
@@ -170,22 +191,48 @@ export default function NavBar() {
                       className={({ isActive }) =>
                         cn(
                           "text-lg font-medium transition-colors hover:text-primary",
-                          isActive ? "text-primary" : "text-gray-900"
+                          isActive ? "text-primary" : ""
                         )
                       }
+                      onClick={() => setIsSheetOpen(false)}
                     >
                       {link.title}
                     </RouterLink>
                   )
                 )}
 
+                {user && privateLinks.map((prvLink) => (
+                  <RouterLink
+                    key={prvLink.href}
+                    to={prvLink.href}
+                    className={({ isActive }) =>
+                      cn(
+                        "text-lg font-medium transition-colors hover:text-primary",
+                        isActive ? "text-primary" : ""
+                      )
+                    }
+                    onClick={() => setIsSheetOpen(false)}
+                  >
+                    {prvLink.title}
+                  </RouterLink>
+                ))}
+
                 <Button className="mt-4" asChild>
                   {!user ? (
-                    <RouterLink to="/login">
-                      Login <LogIn className="ml-2 h-4 w-4" />
+                    <RouterLink 
+                      to="/login" 
+                      onClick={() => setIsSheetOpen(false)}
+                    >
+                      Login/Register <LogIn className="ml-2 h-4 w-4" />
                     </RouterLink>
                   ) : (
-                    <button onClick={signOutUser} className="flex items-center gap-1">
+                    <button 
+                      onClick={() => {
+                        signOutUser();
+                        setIsSheetOpen(false);
+                      }} 
+                      className="flex items-center gap-1"
+                    >
                       Sign Out <LogOut className="h-4 w-4" />
                     </button>
                   )}
