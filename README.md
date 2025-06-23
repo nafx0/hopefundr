@@ -1,33 +1,12 @@
-# 🌟 Hopefundr
+# React + Vite
 
-**Hopefundr** is a full-stack crowdfunding platform where users can create, support, and manage fundraising campaigns. Built with the **MERN stack**, it connects ideas with the people who want to fund them.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## 🚀 Live Site
-👉 [Live Site](https://hopefundr.vercel.app)
+Currently, two official plugins are available:
 
-## ✨ Features
-- Firebase Auth (Email + OAuth)
-- Add/Update/Delete Campaigns
-- Donate & Track Donations
-- Protected Routes & Private Pages
-- Responsive Design + Dark Mode
-- Smooth UI with Shadcn + Tailwind
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## 🧰 Tech Stack
-React, Vite, Node, Express, MongoDB, Tailwind, Shadcn UI
+## Expanding the ESLint configuration
 
-## ⚙️ Setup
-```bash
-# Client
-npm install && npm run dev
-
-# Server
-npm install && npm run dev
-```
-
-## 🔐 .env Required
-- VITE_FIREBASE_*
-- MONGODB_URI
-
-## 🧑‍💻 Author
-Nafiul Islam Nafis
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
