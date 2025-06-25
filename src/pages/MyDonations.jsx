@@ -25,7 +25,7 @@ const donations = [
 
 export default function MyDonations() {
   return (
-    <section className="min-h-svh bg-muted/40 py-12 px-6 flex justify-center">
+    <section className="min-h-svh bg-muted/40 py-12 px-6 flex justify-center mt-10">
       <div className="w-full max-w-5xl space-y-10">
         {/* Header */}
         <div className="text-center space-y-3">

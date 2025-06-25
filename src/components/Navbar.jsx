@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { NavLink as RouterLink, useLocation } from "react-router-dom";
 import { NavHashLink } from "react-router-hash-link";
 import { cn } from "@/lib/utils";
@@ -24,8 +24,8 @@ import { AuthContext } from "../contexts/AuthProvider";
 
 export default function NavBar() {
   const { user, signOutUser } = useContext(AuthContext);
-
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
 
   const mainLinks = [
@@ -39,6 +39,17 @@ export default function NavBar() {
     { title: "Create Campaign", href: "/createCampaign" },
   ];
 
+  // Scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      setIsScrolled(scrollTop > 50);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   // Helper to determine active hash links
   const isHashLinkActive = (href) => {
     const [path, hash] = href.split("#");
@@ -48,13 +59,28 @@ export default function NavBar() {
     return location.pathname === currentPath && location.hash === currentHash;
   };
 
+  // Check if we're on the home page
+  const isHomePage = location.pathname === "/";
+
   return (
-    <header className="sticky top-0 z-40 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 max-w-7xl mx-auto px-5 md:px-0">
-      <div className="container flex h-16 items-center justify-between">
+    <header 
+      className={cn(
+        "fixed top-0 z-50 w-full transition-all duration-300 ease-in-out px-5 md:px-0",
+        isHomePage && !isScrolled 
+          ? "bg-transparent backdrop-blur-none" 
+          : "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+      )}
+    >
+      <div className="container flex h-16 items-center justify-between max-w-7xl mx-auto">
         {/* Logo */}
         <div className="flex items-center gap-2">
           <RouterLink to="/" className="flex items-center space-x-2">
-            <span className="font-bold text-xl">
+            <span 
+              className={cn(
+                "font-bold text-xl transition-colors duration-300",
+                isHomePage && !isScrolled ? "text-white" : ""
+              )}
+            >
               Hopefund<span className="text-[#2e7d32]">r.</span>
             </span>
           </RouterLink>
@@ -79,8 +105,11 @@ export default function NavBar() {
                       activeClassName="text-primary"
                       className={cn(
                         navigationMenuTriggerStyle(),
-                        "font-medium transition-colors hover:text-primary",
-                        isHashLinkActive(link.href) && "text-primary"
+                        "font-medium transition-all duration-300 hover:text-primary",
+                        isHashLinkActive(link.href) && "text-primary",
+                        isHomePage && !isScrolled 
+                          ? "text-white/90 hover:text-white bg-transparent hover:bg-white/10" 
+                          : ""
                       )}
                     >
                       {link.title}
@@ -91,8 +120,11 @@ export default function NavBar() {
                         <NavigationMenuLink
                           className={cn(
                             navigationMenuTriggerStyle(),
-                            "font-medium transition-colors hover:text-primary",
-                            isActive ? "text-primary" : ""
+                            "font-medium transition-all duration-300 hover:text-primary",
+                            isActive ? "text-primary" : "",
+                            isHomePage && !isScrolled 
+                              ? "text-white/90 hover:text-white bg-transparent hover:bg-white/10" 
+                              : ""
                           )}
                           active={isActive}
                         >
@@ -112,8 +144,11 @@ export default function NavBar() {
                         <NavigationMenuLink
                           className={cn(
                             navigationMenuTriggerStyle(),
-                            "font-medium transition-colors hover:text-primary",
-                            isActive ? "text-primary" : ""
+                            "font-medium transition-all duration-300 hover:text-primary",
+                            isActive ? "text-primary" : "",
+                            isHomePage && !isScrolled 
+                              ? "text-white/90 hover:text-white bg-transparent hover:bg-white/10" 
+                              : ""
                           )}
                           active={isActive}
                         >
@@ -129,7 +164,17 @@ export default function NavBar() {
 
         {/* Auth Buttons */}
         <div className="hidden md:flex items-center">
-          <Button variant="default" size="sm" asChild>
+          <Button 
+            variant={isHomePage && !isScrolled ? "outline" : "default"} 
+            size="sm" 
+            asChild
+            className={cn(
+              "transition-all duration-300",
+              isHomePage && !isScrolled 
+                ? "border-white/30 text-primary hover:bg-white/10 hover:text-white" 
+                : ""
+            )}
+          >
             {!user ? (
               <RouterLink to="/login">
                 Login/Register <LogIn className="ml-2 h-4 w-4" />
@@ -146,7 +191,16 @@ export default function NavBar() {
         <div className="md:hidden">
           <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
             <SheetTrigger asChild>
-              <Button variant="outline" size="icon" className="h-9 w-9">
+              <Button 
+                variant="outline" 
+                size="icon" 
+                className={cn(
+                  "h-9 w-9 transition-all duration-300",
+                  isHomePage && !isScrolled 
+                    ? "border-white/30 text-shadow-muted-foreground hover:bg-white/10 hover:text-white" 
+                    : ""
+                )}
+              >
                 <Menu className="h-5 w-5" />
                 <span className="sr-only">Toggle menu</span>
               </Button>

@@ -96,7 +96,7 @@ const Register = ({ className, ...props }) => {
   };
 
   return (
-    <div className="bg-background flex min-h-svh relative flex-col items-center justify-center gap-6 py-10 px-6 md:p-10">
+    <div className="bg-background flex min-h-svh relative flex-col items-center justify-center gap-6 py-10 px-6 md:p-10 mt-10">
       <div className="w-full max-w-sm">
         <div className={cn("flex flex-col gap-6", className)} {...props}>
           <form onSubmit={handleRegister}>

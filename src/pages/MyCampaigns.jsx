@@ -6,20 +6,20 @@ import Swal from "sweetalert2";
 // import { AuthContext } from "../contexts/AuthProvider";
 
 const dummyMyCampaigns = [
-    // {
-    //   id: 1,
-    //   title: "Fund My Final Year Project",
-    //   image: "https://placehold.co/400x200",
-    //   goal: 1200,
-    //   raised: 750,
-    // },
-    // {
-    //   id: 2,
-    //   title: "Help Me Attend TechConf 2025",
-    //   image: "https://placehold.co/400x200",
-    //   goal: 2000,
-    //   raised: 2000,
-    // },
+    {
+      id: 1,
+      title: "Fund My Final Year Project",
+      image: "https://placehold.co/400x200",
+      goal: 1200,
+      raised: 750,
+    },
+    {
+      id: 2,
+      title: "Help Me Attend TechConf 2025",
+      image: "https://placehold.co/400x200",
+      goal: 2000,
+      raised: 2000,
+    },
 ];
 
 const MyCampaigns = () => {
@@ -48,7 +48,7 @@ const MyCampaigns = () => {
   };
 
   return (
-    <section className="min-h-svh bg-muted/40 flex items-center justify-center px-6 py-12">
+    <section className="min-h-svh bg-muted/40 flex items-center justify-center px-6 py-12 mt-10">
       <div className="w-full max-w-5xl space-y-10">
         {/* Header */}
         <div className="flex flex-col items-center gap-3 text-center">
