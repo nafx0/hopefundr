@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { NavLink as RouterLink, useLocation } from "react-router-dom";
 import { NavHashLink } from "react-router-hash-link";
 import { cn } from "@/lib/utils";
@@ -20,16 +20,14 @@ import {
   SheetHeader,
 } from "@/components/ui/sheet";
 import { LogIn, LogOut, Menu } from "lucide-react";
-
-// Replace with actual AuthContext in your app
-// const { user, signOutUser } = useContext(AuthContext);
-const user = null; // Placeholder
-const signOutUser = () => console.log("User signed out");
+import { AuthContext } from "../contexts/AuthProvider";
 
 export default function NavBar() {
+  const { user, signOutUser } = useContext(AuthContext);
+
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const location = useLocation();
-  
+
   const mainLinks = [
     { title: "Home", href: "/#home", hashLink: true },
     { title: "All Campaigns", href: "/#campaigns", hashLink: true },
@@ -43,12 +41,11 @@ export default function NavBar() {
 
   // Helper to determine active hash links
   const isHashLinkActive = (href) => {
-    const [path, hash] = href.split('#');
-    const currentPath = path || '/';
-    const currentHash = hash ? `#${hash}` : '';
-    
-    return location.pathname === currentPath && 
-           location.hash === currentHash;
+    const [path, hash] = href.split("#");
+    const currentPath = path || "/";
+    const currentHash = hash ? `#${hash}` : "";
+
+    return location.pathname === currentPath && location.hash === currentHash;
   };
 
   return (
@@ -201,36 +198,37 @@ export default function NavBar() {
                   )
                 )}
 
-                {user && privateLinks.map((prvLink) => (
-                  <RouterLink
-                    key={prvLink.href}
-                    to={prvLink.href}
-                    className={({ isActive }) =>
-                      cn(
-                        "text-lg font-medium transition-colors hover:text-primary",
-                        isActive ? "text-primary" : ""
-                      )
-                    }
-                    onClick={() => setIsSheetOpen(false)}
-                  >
-                    {prvLink.title}
-                  </RouterLink>
-                ))}
+                {user &&
+                  privateLinks.map((prvLink) => (
+                    <RouterLink
+                      key={prvLink.href}
+                      to={prvLink.href}
+                      className={({ isActive }) =>
+                        cn(
+                          "text-lg font-medium transition-colors hover:text-primary",
+                          isActive ? "text-primary" : ""
+                        )
+                      }
+                      onClick={() => setIsSheetOpen(false)}
+                    >
+                      {prvLink.title}
+                    </RouterLink>
+                  ))}
 
                 <Button className="mt-4" asChild>
                   {!user ? (
-                    <RouterLink 
-                      to="/login" 
+                    <RouterLink
+                      to="/login"
                       onClick={() => setIsSheetOpen(false)}
                     >
                       Login/Register <LogIn className="ml-2 h-4 w-4" />
                     </RouterLink>
                   ) : (
-                    <button 
+                    <button
                       onClick={() => {
                         signOutUser();
                         setIsSheetOpen(false);
-                      }} 
+                      }}
                       className="flex items-center gap-1"
                     >
                       Sign Out <LogOut className="h-4 w-4" />

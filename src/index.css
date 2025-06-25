@@ -3,6 +3,23 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Hide visibility toggle in all browsers */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-webkit-reveal,
+input[type="password"]::-webkit-contacts-auto-fill-button,
+input[type="password"]::-webkit-credentials-auto-fill-button {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  width: 0;
+  height: 0;
+}
+
+/* Increase padding to prevent overlap */
+input[type="password"] {
+  padding-right: 40px !important; /* Space for your custom button */
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

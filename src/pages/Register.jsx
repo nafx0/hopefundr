@@ -4,23 +4,14 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-// import { sendEmailVerification } from "firebase/auth";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-// import { toast } from "react-toastify";
-// import { AuthContext } from "../Provider/AuthProvider";
+import { AuthContext } from "../contexts/AuthProvider";
+import { sendEmailVerification } from "firebase/auth";
 
 const Register = ({ className, ...props }) => {
-  //   const { registerManually } = useContext(AuthContext);
-  const registerManually = (email, password) => {
-    console.log(
-      "Manual registration function called with email:",
-      email,
-      "and password:",
-      password
-    );
-  };
+  const { registerManually } = useContext(AuthContext);
 
   const [form, setForm] = useState({
     email: "",
@@ -41,7 +32,7 @@ const Register = ({ className, ...props }) => {
       Swal.fire({
         icon: "error",
         title: "Login Failed",
-        text: { errorMessage },
+        text: errorMessage,
       });
     }
   }, [errorMessage]);
@@ -88,20 +79,19 @@ const Register = ({ className, ...props }) => {
       .then((result) => {
         console.log(result.user);
 
-        // Reset form and set success only after successful registration
-        setForm({ email: "", pass: "", confPass: "" });
         setSuccess(true);
 
         // Send email verification after successful registration
-        // sendEmailVerification(result.user);
+        sendEmailVerification(result.user);
 
         navigate("/");
       })
-      .then(() => {
-        console.log("Email verification sent!");
-      })
       .catch((error) => {
         setErrorMessage(error.message);
+      })
+      .finally(() => {
+        // Reset form and set success only after successful registration
+        setForm({ email: "", pass: "", confPass: "" });
       });
   };
 

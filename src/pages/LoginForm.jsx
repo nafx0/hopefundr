@@ -1,31 +1,16 @@
 import { Eye, EyeOff, GalleryVerticalEnd } from "lucide-react";
-
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {  useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-// import { AuthContext } from "../Provider/AuthProvider";
 import Swal from "sweetalert2";
+import { sendPasswordResetEmail } from "firebase/auth";
+import { AuthContext } from "../contexts/AuthProvider";
 
 export function LoginForm({ className, ...props }) {
-//   const { googleAuth, logInManually } = useContext(AuthContext);
-    const googleAuth = () => {
-        console.log("Google Auth function called");
-    }
-
-    const logInManually = (email, password) => {
-        console.log("Manual login function called with email:", email, "and password:", password);
-    }
-
-    // const sendPasswordResetEmail = (email) => {
-    //     console.log("Password reset email function called");
-    // }
-
-    const handleForgetPass = () => {
-        console.log("Handle forget password function called");
-    }
+  const { googleAuth, logInManually } = useContext(AuthContext);
 
   const [form, setForm] = useState({
     email: "",
@@ -46,7 +31,7 @@ export function LoginForm({ className, ...props }) {
       Swal.fire({
         icon: "error",
         title: "Login Failed",
-        text: { errorMessage },
+        text: errorMessage,
       });
     }
   }, [errorMessage]);
@@ -86,30 +71,32 @@ export function LoginForm({ className, ...props }) {
       .then((userCredential) => {
         console.log("Login User: ", userCredential.user);
         setSuccess(true);
-        setForm({ ...form, email: "", pass: "" });
         navigate("/");
       })
       .catch((error) => {
         const errorMessage = error.message;
         setErrorMessage(errorMessage);
+      })
+      .finally(() => {
+        setForm({ ...form, email: "", pass: "" });
       });
   };
 
-//   const handleForgetPass = () => {
-//     const email = emailRef.current.value;
+  const handleForgetPass = () => {
+    const email = emailRef.current.value;
 
-//     if (!email) {
-//       setErrorMessage("Provide a valid email");
-//     } else {
-//       sendPasswordResetEmail( email )
-//         .then(() => {
-//           console.log("Password reset email sent!");
-//         })
-//         .catch((error) => {
-//           setErrorMessage(error.message);
-//         });
-//     }
-//   };
+    if (!email) {
+      setErrorMessage("Provide a valid email");
+    } else {
+      sendPasswordResetEmail(email)
+        .then(() => {
+          console.log("Password reset email sent!");
+        })
+        .catch((error) => {
+          setErrorMessage(error.message);
+        });
+    }
+  };
 
   return (
     <div className="bg-background flex min-h-svh relative flex-col items-center justify-center gap-6 py-10 px-6 md:p-10">
