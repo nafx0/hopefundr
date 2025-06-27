@@ -7,11 +7,13 @@ import Home from "./pages/Home.jsx";
 import ErrorPage from "./pages/ErrorPage.jsx";
 import { LoginForm } from "./pages/LoginForm.jsx";
 import Register from "./pages/Register.jsx";
-import AuthProvider from "./contexts/AuthProvider.jsx";
-import CreateCampaign from "./pages/createCampaign.jsx";
+import AuthProvider from "./contexts/AuthProvider.jsx";         
 import MyCampaigns from "./pages/MyCampaigns.jsx";
 import MyDonations from "./pages/MyDonations.JSX";
 import PrivateRoute from "./protected/PrivateRoute.jsx";
+import SingleCampaign from "./components/SingleCampaign.jsx";
+import EditCampaign from "./pages/EditCampaign.jsx";
+import CreateCampaign from "./pages/createCampaign.jsx";
 
 const router = createBrowserRouter([
   {
@@ -42,7 +44,15 @@ const router = createBrowserRouter([
       {
         path: "/myDonations",
         element: <PrivateRoute><MyDonations /></PrivateRoute>,
-      }
+      },
+      {
+        path: "/campaign/:id",
+        element: <PrivateRoute><SingleCampaign /></PrivateRoute>,
+      },
+      {
+        path: "/editCampaign/:id",
+        element: <PrivateRoute><EditCampaign /></PrivateRoute>,
+      },
     ],
   },
 ]);

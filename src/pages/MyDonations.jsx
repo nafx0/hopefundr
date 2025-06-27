@@ -3,29 +3,29 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Separator } from "@/components/ui/separator";
 
 const donations = [
-  {
-    id: "1",
-    campaign: "Save the Rainforest",
-    amount: 50,
-    date: "2025-06-20T10:30:00Z",
-  },
-  {
-    id: "2",
-    campaign: "Help Local School",
-    amount: 25,
-    date: "2025-06-15T14:15:00Z",
-  },
-  {
-    id: "3",
-    campaign: "Emergency Medical Aid",
-    amount: 100,
-    date: "2025-06-10T09:45:00Z",
-  },
+  // {
+  //   id: "1",
+  //   campaign: "Save the Rainforest",
+  //   amount: 50,
+  //   date: "2025-06-20T10:30:00Z",
+  // },
+  // {
+  //   id: "2",
+  //   campaign: "Help Local School",
+  //   amount: 25,
+  //   date: "2025-06-15T14:15:00Z",
+  // },
+  // {
+  //   id: "3",
+  //   campaign: "Emergency Medical Aid",
+  //   amount: 100,
+  //   date: "2025-06-10T09:45:00Z",
+  // },
 ];
 
 export default function MyDonations() {
   return (
-    <section className="min-h-svh bg-muted/40 py-12 px-6 flex justify-center mt-10">
+    <section className="min-h-svh bg-muted/40 flex items-center justify-center px-6 py-12 mt-10">
       <div className="w-full max-w-5xl space-y-10">
         {/* Header */}
         <div className="text-center space-y-3">

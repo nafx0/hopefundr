@@ -1,8 +1,7 @@
 import { useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { GalleryVerticalEnd } from "lucide-react";
 import Swal from "sweetalert2";
-
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,10 +9,12 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { AuthContext } from "../contexts/AuthProvider";
 
-export default function CreateCampaign({ className, ...props }) {
+export default function EditCampaign({ className, ...props }) {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
-
+  const id = useParams().id;
+  // eslint-disable-next-line no-unused-vars
+  const [campaign, setCampaign] = useState(null);
   // Initialize form state with user info
   const [form, setForm] = useState({
     name: user?.displayName || "",
@@ -27,15 +28,42 @@ export default function CreateCampaign({ className, ...props }) {
     email: user?.email || "",
   });
 
+  useEffect(() => {
+    fetch(`http://localhost:5000/campaigns/${id}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch campaign");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (!data) {
+          throw new Error("Campaign not found");
+        }
+        setCampaign(data);
+        setForm({
+          name: user?.displayName || "",
+          title: data.title || "",
+          type: data.type || "",
+          description: data.description || "",
+          goal: data.goal || "",
+          minDonationAmount: data.minDonationAmount || "",
+          deadline: data.deadline || "",
+          image: data.image || "",
+          email: user?.email || "",
+        });
+      });
+  }, []);
+
   const [error, setError] = useState("");
 
   // Update form when user data changes
   useEffect(() => {
     if (user) {
-      setForm(prev => ({
+      setForm((prev) => ({
         ...prev,
         name: user.displayName || "",
-        email: user.email || ""
+        email: user.email || "",
       }));
     }
   }, [user]);
@@ -45,7 +73,7 @@ export default function CreateCampaign({ className, ...props }) {
     if (error) {
       Swal.fire({
         icon: "error",
-        title: "Campaign Creation Failed",
+        title: "Campaign Edit Failed",
         text: error,
       });
     }
@@ -60,7 +88,13 @@ export default function CreateCampaign({ className, ...props }) {
     e.preventDefault();
 
     // Validate required fields
-    if (!form.title || !form.minDonationAmount || !form.description || !form.deadline || !form.type) {
+    if (
+      !form.title ||
+      !form.minDonationAmount ||
+      !form.description ||
+      !form.deadline ||
+      !form.type
+    ) {
       return setError("Please fill out all required fields.");
     }
 
@@ -70,8 +104,8 @@ export default function CreateCampaign({ className, ...props }) {
     }
 
     // Submit to backend
-    fetch("http://localhost:5000/campaigns", {
-      method: "POST",
+    fetch(`http://localhost:5000/campaigns/${id}`, {
+      method: "PUT",
       headers: {
         "content-type": "application/json",
       },
@@ -79,15 +113,15 @@ export default function CreateCampaign({ className, ...props }) {
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Failed to create campaign");
+          throw new Error("Failed to edit campaign");
         }
         return response.json();
       })
       .then((data) => {
-        console.log("Campaign created successfully:", data);
+        console.log("Campaign edited successfully:", data);
         Swal.fire({
-          title: "Campaign Created",
-          text: "Your campaign has been successfully created.",
+          title: "Campaign Edited",
+          text: "Your campaign has been successfully edited.",
           icon: "success",
         });
         // Reset form
@@ -104,8 +138,8 @@ export default function CreateCampaign({ className, ...props }) {
         navigate("/myCampaigns");
       })
       .catch((error) => {
-        console.error("Error creating campaign:", error);
-        setError("Failed to create campaign. Please try again.");
+        console.error("Error editing campaign:", error);
+        setError("Failed to edit campaign. Please try again.");
       });
   };
 
@@ -147,7 +181,9 @@ export default function CreateCampaign({ className, ...props }) {
               </div>
 
               <div className="grid gap-2">
-                <Label htmlFor="title">Campaign Title <span className="text-red-500">*</span></Label>
+                <Label htmlFor="title">
+                  Campaign Title <span className="text-red-500">*</span>
+                </Label>
                 <Input
                   id="title"
                   name="title"
@@ -159,7 +195,9 @@ export default function CreateCampaign({ className, ...props }) {
               </div>
 
               <div className="grid gap-2">
-                <Label htmlFor="type">Campaign Type <span className="text-red-500">*</span></Label>
+                <Label htmlFor="type">
+                  Campaign Type <span className="text-red-500">*</span>
+                </Label>
                 <select
                   id="type"
                   name="type"
@@ -177,7 +215,9 @@ export default function CreateCampaign({ className, ...props }) {
               </div>
 
               <div className="grid gap-2">
-                <Label htmlFor="description">Description <span className="text-red-500">*</span></Label>
+                <Label htmlFor="description">
+                  Description <span className="text-red-500">*</span>
+                </Label>
                 <Textarea
                   id="description"
                   name="description"
@@ -189,7 +229,9 @@ export default function CreateCampaign({ className, ...props }) {
               </div>
 
               <div className="grid gap-2">
-                <Label htmlFor="goal">Goal Amount (USD) <span className="text-red-500">*</span></Label>
+                <Label htmlFor="goal">
+                  Goal Amount (USD) <span className="text-red-500">*</span>
+                </Label>
                 <Input
                   type="number"
                   id="goal"
@@ -203,7 +245,10 @@ export default function CreateCampaign({ className, ...props }) {
               </div>
 
               <div className="grid gap-2">
-                <Label htmlFor="minDonationAmount">Minimum Donation Amount (USD) <span className="text-red-500">*</span></Label>
+                <Label htmlFor="minDonationAmount">
+                  Minimum Donation Amount (USD){" "}
+                  <span className="text-red-500">*</span>
+                </Label>
                 <Input
                   type="number"
                   id="minDonationAmount"
@@ -217,7 +262,9 @@ export default function CreateCampaign({ className, ...props }) {
               </div>
 
               <div className="grid gap-2">
-                <Label htmlFor="deadline">Deadline <span className="text-red-500">*</span></Label>
+                <Label htmlFor="deadline">
+                  Deadline <span className="text-red-500">*</span>
+                </Label>
                 <Input
                   type="date"
                   id="deadline"
@@ -225,7 +272,7 @@ export default function CreateCampaign({ className, ...props }) {
                   required
                   value={form.deadline}
                   onChange={handleChange}
-                  min={new Date().toISOString().split('T')[0]}
+                  min={new Date().toISOString().split("T")[0]}
                 />
               </div>
 
@@ -245,7 +292,7 @@ export default function CreateCampaign({ className, ...props }) {
               )}
 
               <Button type="submit" className="w-full">
-                Create Campaign
+                Submit Changes
               </Button>
             </div>
           </form>
