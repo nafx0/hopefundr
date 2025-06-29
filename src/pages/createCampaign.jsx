@@ -70,7 +70,7 @@ export default function CreateCampaign({ className, ...props }) {
     }
 
     // Submit to backend
-    fetch("http://localhost:5000/campaigns", {
+    fetch("https://hopefundr-server.vercel.app/campaigns", {
       method: "POST",
       headers: {
         "content-type": "application/json",

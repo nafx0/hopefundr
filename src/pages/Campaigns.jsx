@@ -10,7 +10,7 @@ const Campaigns = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:5000/campaigns")
+    fetch("https://hopefundr-server.vercel.app/campaigns")
       .then((res) => res.json())
       .then((data) => {
         setCampaigns(data);

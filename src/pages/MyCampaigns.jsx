@@ -15,7 +15,7 @@ const MyCampaigns = () => {
   useEffect(() => {
     if (!user?.email) return;
 
-    fetch(`http://localhost:5000/campaigns/email/${user.email}`)
+    fetch(`https://hopefundr-server.vercel.app/campaigns/email/${user.email}`)
       .then((response) => response.json())
       .then((data) => {
         setCampaigns(data);
@@ -36,7 +36,7 @@ const MyCampaigns = () => {
 
     if (result.isConfirmed) {
       try {
-        const res = await fetch(`http://localhost:5000/campaigns/${_id}`, {
+        const res = await fetch(`https://hopefundr-server.vercel.app/campaigns/${_id}`, {
           method: "DELETE",
         });
 

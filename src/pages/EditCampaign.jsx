@@ -29,7 +29,7 @@ export default function EditCampaign({ className, ...props }) {
   });
 
   useEffect(() => {
-    fetch(`http://localhost:5000/campaigns/${id}`)
+    fetch(`https://hopefundr-server.vercel.app/campaigns/${id}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch campaign");
@@ -104,7 +104,7 @@ export default function EditCampaign({ className, ...props }) {
     }
 
     // Submit to backend
-    fetch(`http://localhost:5000/campaigns/${id}`, {
+    fetch(`https://hopefundr-server.vercel.app/campaigns/${id}`, {
       method: "PUT",
       headers: {
         "content-type": "application/json",
