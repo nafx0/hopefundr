@@ -2,7 +2,6 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
   LoaderCircle,
-  Heart,
   Flag,
   BarChart2,
   Calendar,
@@ -17,7 +16,6 @@ import {
   CardHeader,
   CardContent,
   CardTitle,
-  CardDescription,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
@@ -27,6 +25,7 @@ export default function SingleCampaign() {
   const [donations, setDonations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [daysLeft, setDaysLeft] = useState(0);
+  const [showFullDesc, setShowFullDesc] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -34,9 +33,7 @@ export default function SingleCampaign() {
       try {
         const [campRes, donRes] = await Promise.all([
           fetch(`https://hopefundr-server.vercel.app/campaigns/${id}`),
-          fetch(
-            `https://hopefundr-server.vercel.app/donations/campaign/${id}`
-          ),
+          fetch(`https://hopefundr-server.vercel.app/donations/campaign/${id}`),
         ]);
         const campData = await campRes.json();
         const donData = donRes.ok ? await donRes.json() : [];
@@ -67,9 +64,9 @@ export default function SingleCampaign() {
           <label>Campaign</label>
           <input type="text" class="input w-full" value="${campaign.title}" readonly />
           <label>Name</label>
-          <input type="text" id="donorName" class="input w-full" required />
+          <input type="text" id="donorName" class="input w-full" value="${campaign.name}" readonly />
           <label>Email</label>
-          <input type="email" id="donorEmail" class="input w-full" required />
+          <input type="email" id="donorEmail" class="input w-full" value="${campaign.email}" readonly />
           <label>Amount (min: $${campaign.minDonationAmount})</label>
           <input type="number" id="donAmount" class="input w-full" min="${campaign.minDonationAmount}" required />
         </div>
@@ -134,6 +131,7 @@ export default function SingleCampaign() {
   const raised = donations.reduce((sum, d) => sum + d.amount, 0);
   const goal = parseFloat(campaign.goal);
   const progressPct = Math.min((raised / goal) * 100, 100);
+  const shortDesc = campaign.description.slice(0, 200);
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-12 space-y-8 mt-10">
@@ -151,7 +149,20 @@ export default function SingleCampaign() {
               <User /> {campaign.name}
             </div>
             <h1 className="text-3xl font-bold">{campaign.title}</h1>
-            <p className="text-gray-700">{campaign.description}</p>
+
+            <p className="text-gray-700">
+              {showFullDesc ? campaign.description : shortDesc}
+              {campaign.description.length > 200 && (
+                <Button
+                  variant="link"
+                  className="ml-2 text-sm"
+                  onClick={() => setShowFullDesc(!showFullDesc)}
+                >
+                  {showFullDesc ? "See Less" : "See More"}
+                </Button>
+              )}
+            </p>
+
             <div>
               <div className="flex justify-between font-medium text-gray-700">
                 <span>Raised: ${raised.toLocaleString()}</span>
@@ -162,15 +173,9 @@ export default function SingleCampaign() {
                 {Math.floor(progressPct)}%
               </p>
             </div>
-            <div className="flex gap-4 flex-wrap">
-              <Button onClick={handleDonate} size="lg" className="bg-primary">
-                Donate Now
-              </Button>
-              <Button variant="outline" size="lg">
-                <Heart className="mr-2" />
-                Save
-              </Button>
-            </div>
+            <Button onClick={handleDonate} size="lg" className="bg-primary w-full">
+              Donate Now
+            </Button>
           </div>
         </div>
 
@@ -216,7 +221,6 @@ export default function SingleCampaign() {
           </Button>
         </div>
       </div>
-
       <Separator />
     </div>
   );
