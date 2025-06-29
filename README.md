@@ -1,12 +1,73 @@
-# React + Vite
+# HopeFundr
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+[![Live Site](https://img.shields.io/badge/Live-Demo-green?style=for-the-badge)](https://hope-fundr.web.app)
+[![License](https://img.shields.io/github/license/nafx0/hopefundr?style=for-the-badge)](./LICENSE)
 
-Currently, two official plugins are available:
+A modern crowdfunding platform built to empower individuals and organizations to raise funds transparently and efficiently. Whether it’s for medical emergencies, education, or creative projects — HopeFundr enables anyone to create, share, and support causes that matter.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🚀 Live Demo
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+👉 [https://hope-fundr.web.app](https://hope-fundr.web.app)
+
+---
+
+## 🧩 Tech Stack
+
+### Frontend
+- **React.js** + **Vite**
+- **Tailwind CSS** (UI Styling)
+- **SweetAlert2** (Modal UI)
+- **Lucide Icons** (Iconography)
+- **React Router DOM**
+
+### Backend
+- **Express.js** (Node.js)
+- **MongoDB** (Cloud Atlas)
+- **Vercel Serverless Functions** (Backend hosting)
+- **Firebase** (Frontend hosting & auth)
+
+---
+
+## 📌 Features
+
+- 🧑 Create and manage fundraising campaigns
+- 💳 Donate to campaigns securely
+- 📊 Track goal progress visually
+- 📬 Email-based campaign filtering
+- 🕓 Real-time updates on campaign deadline and progress
+- 💡 Supporters and donation history
+
+---
+
+## 💡 Motivation
+
+HopeFundr was built to solve the real-world problem of fragmented and unverified donation systems. By offering a streamlined, full-stack solution, it enables:
+- Transparent fundraising
+- Easier campaign sharing
+- Real-time supporter engagement
+
+---
+
+## 🛠️ Getting Started Locally
+
+### Prerequisites
+- Node.js (v18+)
+- MongoDB Atlas URI
+- Firebase Project (for auth & hosting)
+
+### Clone & Run
+```bash
+git clone https://github.com/nafx0/hopefundr.git
+cd hopefundr
+
+# Install frontend
+cd client
+npm install
+npm run dev
+
+# In a separate terminal, run backend
+cd ../server
+npm install
+npm run dev
