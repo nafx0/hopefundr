@@ -62,13 +62,13 @@ export default function SingleCampaign() {
       html: `
         <div class="grid gap-4 text-left">
           <label>Campaign</label>
-          <input type="text" class="input w-full" value="${campaign.title}" readonly />
+          <input type="text" class="input border-2 border-accent-foreground px-3 py-2 rounded-lg w-full" value="${campaign.title}" readonly />
           <label>Name</label>
-          <input type="text" id="donorName" class="input w-full" value="${campaign.name}" readonly />
+          <input type="text" id="donorName" class="input border-2 border-accent-foreground px-3 py-2 rounded-lg w-full" value="${campaign.name}" readonly />
           <label>Email</label>
-          <input type="email" id="donorEmail" class="input w-full" value="${campaign.email}" readonly />
+          <input type="email" id="donorEmail" class="input border-2 border-accent-foreground px-3 py-2 rounded-lg w-full" value="${campaign.email}" readonly />
           <label>Amount (min: $${campaign.minDonationAmount})</label>
-          <input type="number" id="donAmount" class="input w-full" min="${campaign.minDonationAmount}" required />
+          <input type="number" placeholder="Enter your donation amount" id="donAmount" class="input border-2 border-accent-foreground px-3 py-2 rounded-lg w-full" min="${campaign.minDonationAmount}" required />
         </div>
       `,
       showCancelButton: true,
