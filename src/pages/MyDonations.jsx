@@ -24,8 +24,9 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useContext, useEffect, useState } from "react";
+import { use, useContext, useEffect, useState } from "react";
 import { AuthContext } from "@/contexts/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 export default function MyDonations() {
   const { user } = useContext(AuthContext);
@@ -81,6 +82,11 @@ export default function MyDonations() {
         return b.amount - a.amount;
       }
     });
+
+  const navigate = useNavigate();
+  const handleExploreCampaigns = () => {
+    navigate("/#campaigns");
+  }  
 
   const totalDonated = donations.reduce((sum, d) => sum + d.amount, 0);
 
@@ -185,7 +191,7 @@ export default function MyDonations() {
                   : "You haven't donated to any campaigns yet."}
               </p>
               {!searchTerm && (
-                <Button variant="secondary">Browse Campaigns</Button>
+                <Button variant="secondary" onClick={handleExploreCampaigns}>Browse Campaigns</Button>
               )}
             </div>
           ) : (
