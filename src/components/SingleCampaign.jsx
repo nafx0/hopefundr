@@ -2,12 +2,28 @@ import { useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { LoaderCircle, Flag, BarChart2, Calendar, User } from "lucide-react";
 import Swal from "sweetalert2";
+// eslint-disable-next-line no-unused-vars
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { AuthContext } from "../contexts/AuthProvider";
+
+// Apple-style card animation variant
+const cardVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: (delay = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: [0.25, 0.1, 0.25, 1],
+      delay,
+    },
+  }),
+};
 
 export default function SingleCampaign() {
   const { id } = useParams();
@@ -130,8 +146,21 @@ export default function SingleCampaign() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-12 space-y-8 mt-10">
-      <div className="grid lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-6">
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        custom={0}
+        variants={cardVariants}
+        className="grid lg:grid-cols-3 gap-8"
+      >
+        {/* Left section */}
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          custom={0.1}
+          variants={cardVariants}
+          className="lg:col-span-2 space-y-6"
+        >
           <img
             src={campaign.image}
             alt={campaign.title}
@@ -177,65 +206,79 @@ export default function SingleCampaign() {
               Donate Now
             </Button>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="space-y-6">
-          <Card className="shadow">
-            <CardHeader>
-              <CardTitle>Campaign Details</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <p>
-                <strong>Organizer:</strong> {campaign.name}
-              </p>
-              <p>
-                <strong>Category:</strong> {campaign.type}
-              </p>
-              <p>
-                <strong>Min Donation:</strong> ${campaign.minDonationAmount}
-              </p>
-              <p>
-                <strong>Deadline:</strong>{" "}
-                {new Date(campaign.deadline).toLocaleDateString()}
-              </p>
-              <p>
-                <strong>Contact:</strong> {campaign.email}
-              </p>
-            </CardContent>
-          </Card>
+        {/* Right section */}
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          custom={0.2}
+          variants={cardVariants}
+          className="space-y-6"
+        >
+          {/* Campaign Details Card */}
+          <motion.div variants={cardVariants} custom={0.25}>
+            <Card className="shadow hover:shadow-lg transition duration-300">
+              <CardHeader>
+                <CardTitle>Campaign Details</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <p><strong>Organizer:</strong> {campaign.name}</p>
+                <p><strong>Category:</strong> {campaign.type}</p>
+                <p><strong>Min Donation:</strong> ${campaign.minDonationAmount}</p>
+                <p><strong>Deadline:</strong> {new Date(campaign.deadline).toLocaleDateString()}</p>
+                <p><strong>Contact:</strong> {campaign.email}</p>
+              </CardContent>
+            </Card>
+          </motion.div>
 
-          <Card className="shadow">
-            <CardHeader>
-              <CardTitle>Supporters ({donations.length})</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {donations.slice(0, 5).map((d) => (
-                <div
-                  key={d.date + d.email}
-                  className="flex justify-between items-center"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="h-8 w-8 bg-gray-200 rounded-full" />
-                    <div>
-                      <p className="font-medium">{d.name || "Anonymous"}</p>
-                      <p className="text-sm text-gray-500">
-                        ${d.amount.toLocaleString()} •{" "}
-                        {new Date(d.date).toLocaleDateString()}
-                      </p>
+          {/* Supporters Card */}
+          <motion.div variants={cardVariants} custom={0.35}>
+            <Card className="shadow hover:shadow-lg transition duration-300">
+              <CardHeader>
+                <CardTitle>Supporters ({donations.length})</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {donations.slice(0, 5).map((d, i) => (
+                  <motion.div
+                    key={d.date + d.email}
+                    initial="hidden"
+                    animate="visible"
+                    custom={0.4 + i * 0.05}
+                    variants={cardVariants}
+                  >
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center gap-3">
+                        <div className="h-8 w-8 bg-gray-200 rounded-full" />
+                        <div>
+                          <p className="font-medium">{d.name || "Anonymous"}</p>
+                          <p className="text-sm text-gray-500">
+                            ${d.amount.toLocaleString()} •{" "}
+                            {new Date(d.date).toLocaleDateString()}
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              ))}
-              {donations.length > 5 && <Button variant="link">See all</Button>}
-            </CardContent>
-          </Card>
+                  </motion.div>
+                ))}
+                {donations.length > 5 && (
+                  <motion.div variants={cardVariants} custom={0.6}>
+                    <Button variant="link">See all</Button>
+                  </motion.div>
+                )}
+              </CardContent>
+            </Card>
+          </motion.div>
 
-          <Button variant="outline" className="w-full flex items-center">
-            <Flag className="mr-2" />
-            Report this campaign
-          </Button>
-        </div>
-      </div>
+          {/* Report Button */}
+          <motion.div variants={cardVariants} custom={0.45}>
+            <Button variant="outline" className="w-full flex items-center hover:bg-gray-100">
+              <Flag className="mr-2" />
+              Report this campaign
+            </Button>
+          </motion.div>
+        </motion.div>
+      </motion.div>
       <Separator />
     </div>
   );
