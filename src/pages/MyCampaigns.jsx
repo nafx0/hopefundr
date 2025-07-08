@@ -181,7 +181,7 @@ const MyCampaigns = () => {
             <Button 
               variant="outline" 
               className="mt-4"
-              onClick={() => navigate("/create-campaign")}
+              onClick={() => navigate("/createCampaign")}
             >
               Create Your First Campaign
               <ArrowRight className="ml-2 h-4 w-4" />
