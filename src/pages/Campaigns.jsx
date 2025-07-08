@@ -14,7 +14,7 @@ const fadeUpVariant = {
     y: 0,
     transition: {
       delay: i * 0.05,
-      duration: 0.5,
+      duration: 0.3,
       ease: [0.25, 0.1, 0.25, 1],
     },
   }),
@@ -95,7 +95,8 @@ const Campaigns = () => {
         <motion.div
           className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6"
           initial="hidden"
-          animate="visible"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
           variants={{
             visible: {
               transition: {
