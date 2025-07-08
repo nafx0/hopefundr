@@ -1,26 +1,17 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import {
-  LoaderCircle,
-  Flag,
-  BarChart2,
-  Calendar,
-  User,
-} from "lucide-react";
+import { useContext, useEffect, useState } from "react";
+import { LoaderCircle, Flag, BarChart2, Calendar, User } from "lucide-react";
 import Swal from "sweetalert2";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { AuthContext } from "../contexts/AuthProvider";
 
 export default function SingleCampaign() {
   const { id } = useParams();
+  const { user } = useContext(AuthContext);
   const [campaign, setCampaign] = useState(null);
   const [donations, setDonations] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -64,9 +55,9 @@ export default function SingleCampaign() {
           <label>Campaign</label>
           <input type="text" class="input border-2 border-accent-foreground px-3 py-2 rounded-lg w-full" value="${campaign.title}" readonly />
           <label>Name</label>
-          <input type="text" id="donorName" class="input border-2 border-accent-foreground px-3 py-2 rounded-lg w-full" value="${campaign.name}" readonly />
+          <input type="text" id="donorName" class="input border-2 border-accent-foreground px-3 py-2 rounded-lg w-full" value="${user.displayName}" readonly />
           <label>Email</label>
-          <input type="email" id="donorEmail" class="input border-2 border-accent-foreground px-3 py-2 rounded-lg w-full" value="${campaign.email}" readonly />
+          <input type="email" id="donorEmail" class="input border-2 border-accent-foreground px-3 py-2 rounded-lg w-full" value="${user.email}" readonly />
           <label>Amount (min: $${campaign.minDonationAmount})</label>
           <input type="number" placeholder="Enter your donation amount" id="donAmount" class="input border-2 border-accent-foreground px-3 py-2 rounded-lg w-full" min="${campaign.minDonationAmount}" required />
         </div>
@@ -76,10 +67,14 @@ export default function SingleCampaign() {
       preConfirm: () => {
         const name = Swal.getPopup().querySelector("#donorName").value;
         const email = Swal.getPopup().querySelector("#donorEmail").value;
-        const amount = parseFloat(Swal.getPopup().querySelector("#donAmount").value);
+        const amount = parseFloat(
+          Swal.getPopup().querySelector("#donAmount").value
+        );
 
         if (amount < campaign.minDonationAmount) {
-          Swal.showValidationMessage(`Minimum donation is $${campaign.minDonationAmount}`);
+          Swal.showValidationMessage(
+            `Minimum donation is $${campaign.minDonationAmount}`
+          );
         }
 
         return {
@@ -144,7 +139,8 @@ export default function SingleCampaign() {
           />
           <div className="space-y-4">
             <div className="flex flex-wrap gap-4 text-sm text-gray-600">
-              <BarChart2 /> <strong>Min Don:</strong> ${campaign.minDonationAmount}
+              <BarChart2 /> <strong>Min Don:</strong> $
+              {campaign.minDonationAmount}
               <Calendar /> {daysLeft > 0 ? `${daysLeft} days left` : "Ended"}
               <User /> {campaign.name}
             </div>
@@ -173,7 +169,11 @@ export default function SingleCampaign() {
                 {Math.floor(progressPct)}%
               </p>
             </div>
-            <Button onClick={handleDonate} size="lg" className="bg-primary w-full">
+            <Button
+              onClick={handleDonate}
+              size="lg"
+              className="bg-primary w-full"
+            >
               Donate Now
             </Button>
           </div>
@@ -185,11 +185,22 @@ export default function SingleCampaign() {
               <CardTitle>Campaign Details</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
-              <p><strong>Organizer:</strong> {campaign.name}</p>
-              <p><strong>Category:</strong> {campaign.type}</p>
-              <p><strong>Min Donation:</strong> ${campaign.minDonationAmount}</p>
-              <p><strong>Deadline:</strong> {new Date(campaign.deadline).toLocaleDateString()}</p>
-              <p><strong>Contact:</strong> {campaign.email}</p>
+              <p>
+                <strong>Organizer:</strong> {campaign.name}
+              </p>
+              <p>
+                <strong>Category:</strong> {campaign.type}
+              </p>
+              <p>
+                <strong>Min Donation:</strong> ${campaign.minDonationAmount}
+              </p>
+              <p>
+                <strong>Deadline:</strong>{" "}
+                {new Date(campaign.deadline).toLocaleDateString()}
+              </p>
+              <p>
+                <strong>Contact:</strong> {campaign.email}
+              </p>
             </CardContent>
           </Card>
 
@@ -199,13 +210,17 @@ export default function SingleCampaign() {
             </CardHeader>
             <CardContent className="space-y-4">
               {donations.slice(0, 5).map((d) => (
-                <div key={d.date + d.email} className="flex justify-between items-center">
+                <div
+                  key={d.date + d.email}
+                  className="flex justify-between items-center"
+                >
                   <div className="flex items-center gap-3">
                     <div className="h-8 w-8 bg-gray-200 rounded-full" />
                     <div>
                       <p className="font-medium">{d.name || "Anonymous"}</p>
                       <p className="text-sm text-gray-500">
-                        ${d.amount.toLocaleString()} • {new Date(d.date).toLocaleDateString()}
+                        ${d.amount.toLocaleString()} •{" "}
+                        {new Date(d.date).toLocaleDateString()}
                       </p>
                     </div>
                   </div>
