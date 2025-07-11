@@ -14,6 +14,7 @@ const Register = ({ className, ...props }) => {
   const { registerManually } = useContext(AuthContext);
 
   const [form, setForm] = useState({
+    name: "",
     email: "",
     pass: "",
     confPass: "",
@@ -57,8 +58,7 @@ const Register = ({ className, ...props }) => {
     event.preventDefault();
 
     function validatePassword(password) {
-      const regex =
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      const regex = /^.{6,}$/;
       return regex.test(password);
     }
 
@@ -75,7 +75,7 @@ const Register = ({ className, ...props }) => {
     }
 
     // Fixed promise chain
-    registerManually(form.email, form.pass)
+    registerManually(form.name, form.email, form.pass)
       .then((result) => {
         console.log(result.user);
 
@@ -91,7 +91,7 @@ const Register = ({ className, ...props }) => {
       })
       .finally(() => {
         // Reset form and set success only after successful registration
-        setForm({ email: "", pass: "", confPass: "" });
+        setForm({ name: "", email: "", pass: "", confPass: "" });
       });
   };
 
@@ -124,6 +124,17 @@ const Register = ({ className, ...props }) => {
               </div>
               <div className="flex flex-col gap-6">
                 <div className="grid gap-3">
+                  <Label htmlFor="email">Name</Label>
+                  <Input
+                    type="text"
+                    placeholder="John Doe"
+                    required
+                    name="name"
+                    value={form.name}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="grid gap-3">
                   <Label htmlFor="email">Email</Label>
                   <Input
                     type="email"
@@ -142,7 +153,7 @@ const Register = ({ className, ...props }) => {
                     type={showPassword ? "text" : "password"}
                     required
                     name="pass"
-                    placeholder="Enter your password"
+                    placeholder="Enter a six character password"
                     value={form.pass}
                     onChange={handleChange}
                   />

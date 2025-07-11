@@ -8,6 +8,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { AuthContext } from "../contexts/AuthProvider";
+import auth from "../auth/firebase.init";
 
 export function LoginForm({ className, ...props }) {
   const { googleAuth, logInManually } = useContext(AuthContext);
@@ -83,14 +84,18 @@ export function LoginForm({ className, ...props }) {
   };
 
   const handleForgetPass = () => {
-    const email = emailRef.current.value;
+    const email = form.email;
 
     if (!email) {
       setErrorMessage("Provide a valid email");
     } else {
-      sendPasswordResetEmail(email)
+      sendPasswordResetEmail(auth, email)
         .then(() => {
-          console.log("Password reset email sent!");
+          Swal.fire({
+            icon: "success",
+            title: "Password Reset Email Sent",
+            text: "Check your inbox to reset your password.",
+          });
         })
         .catch((error) => {
           setErrorMessage(error.message);
@@ -135,7 +140,6 @@ export function LoginForm({ className, ...props }) {
                     required
                     value={form.email}
                     onChange={handleChange}
-                    ref={emailRef}
                   />
                 </div>
                 <div className="grid gap-3 relative">

@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Loader2, ArrowRight, CalendarDays, DollarSign } from "lucide-react";
+import { ArrowRight, CalendarDays, DollarSign } from "lucide-react";
 import { Link } from "react-router-dom";
-// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 
 const fadeUpVariant = {
@@ -124,67 +123,36 @@ const Campaigns = () => {
                   />
                 </div>
                 <CardContent className="p-5 flex flex-col flex-grow">
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 }}
-                  >
-                    <h2 className="text-lg font-semibold line-clamp-2 mb-2">
-                      {campaign.title}
-                    </h2>
-                  </motion.div>
+                  <h2 className="text-lg font-semibold line-clamp-2 mb-2">
+                    {campaign.title}
+                  </h2>
                   
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.15 }}
-                    className="flex-grow"
-                  >
+                  <div className="flex-grow">
                     <p className="text-muted-foreground text-sm line-clamp-3 mb-4">
                       {campaign.description}
                     </p>
-                  </motion.div>
+                  </div>
 
                   <div className="space-y-2.5 pt-1 mt-auto">
-                    <motion.div
-                      initial={{ opacity: 0, y: 5 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.2 }}
-                      className="flex items-center gap-2 text-sm text-muted-foreground"
-                    >
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <CalendarDays className="w-4 h-4 flex-shrink-0" />
                       <span>Deadline: {formatDate(campaign.deadline)}</span>
-                    </motion.div>
+                    </div>
 
-                    <motion.div
-                      initial={{ opacity: 0, y: 5 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.25 }}
-                      className="flex items-center gap-2 text-sm text-muted-foreground"
-                    >
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <DollarSign className="w-4 h-4 flex-shrink-0" />
                       <span>
                         Goal: ${Number(campaign.goal || 0).toLocaleString()}
                       </span>
-                    </motion.div>
+                    </div>
 
-                    <motion.div
-                      initial={{ opacity: 0, y: 5 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.3 }}
-                      className="flex items-center gap-2 text-sm text-muted-foreground"
-                    >
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <DollarSign className="w-4 h-4 flex-shrink-0" />
                       <span>Min Donation: ${campaign.minDonationAmount || "5"}</span>
-                    </motion.div>
+                    </div>
                   </div>
 
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.35 }}
-                    className="flex justify-end pt-5 mt-2"
-                  >
+                  <div className="flex justify-end pt-5 mt-2">
                     <Link to={`/campaign/${campaign._id}`}>
                       <Button 
                         variant="ghost" 
@@ -195,7 +163,7 @@ const Campaigns = () => {
                         <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
                       </Button>
                     </Link>
-                  </motion.div>
+                  </div>
                 </CardContent>
               </Card>
             </motion.div>
